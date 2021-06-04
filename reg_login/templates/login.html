@@ -1,0 +1,35 @@
+{% extends "base.html" %} 
+{% block content %}
+    <div class="logIn">
+        <h1>Login</h1>
+        <form action="/login_after_reg" method="post">
+            {% csrf_token %}
+            <div class="container-md">
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-group form-inline">
+                            <label for="email"class= "col-md-4" >Email:</label>
+                            <input type="text" name="email" id="email" class="form-control col-md-6">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-group form-inline">
+                            <label for="password" class= "col-md-4">Password:</label>
+                            <input type="password" name="password" id="psd" class="form-control col-md-6">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-group form-inline">
+                            <label for="registration" class= "col-md-4"></label>
+                            <button class="btn btn-default" type="submit">Submit</button>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
