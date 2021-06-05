@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import User
@@ -64,13 +65,14 @@ def login(request):
 
 def success(request):
     if 'user_id' in request.session:
-        user = User.objects.get(id=request.session['user_id'])
+        user = User.objects.get(id= request.session['user_id'])
         context = {
         "user": user
         }
         return render(request, 'success.html', context)
     else: 
-        messages.error(request, 'You must be logged in order to access the shows')
+        # messages.error(request, 'You must be logged in order to access the shows')
+        return HttpResponse("You must be logged in order to access the shows!")
     return redirect("/login_after_reg")
 
 def logout(request):

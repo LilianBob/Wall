@@ -1,42 +1,82 @@
 {% extends "base.html" %} 
     <nav>
         <ul>
-            <li><a href="/logout">Logout</a></li>
+            <li><a href="/logout"> Logout </a></li>
         </ul>
     </nav>
 {% block content %}
-    <div id='wrap'>
-        <h1>Welcome to {{request.session.user}}'s Page!</h1>
-
-        <div id='write'>
-            <h2>Write a Post:</h2>
-            <form action="/process_message" method=POST>
+    <div id="wrap">
+        <h1> Welcome to {{ user.first_name }}'s Page! </h1>
+        <div class="errorMessages hidden">
+            {% if messages %}
+                <ul>
+                    {% for msg in messages %}
+                        <li>{{ msg }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div id="write">
+            <h2> Write a Post: </h2>
+            <form action="/process_content" method="POST">
                 {% csrf_token %}
-                <input type="text" name='mess'>
-                <input type="submit" value="Post">
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="content"class= "col-md-4" ></label>
+                            <textarea name="content" id="content" class="form-control col-md-6"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="post" class= "col-md-4"></label>
+                            <button class="btn btn-default" type="submit"> Post </button>
+                        </div>    
+                    </div>
+                </div>  
             </form>
         </div>
 
-        <div id='posts'>
-            {% for post in wall_messages %}
-            <div class='one_post'>
-                <p class='post'>{{post.message}}</p>
-                <p class='poster'>By: <a href="/user_profile/{{post.poster.id}}">{{post.poster.first_name}} {{post.poster.last_name}}</a></p>
-                <a href="/like/{{post.id}}">Like Post</a>
-                <p>{{ post.user_likes.count }}</p>
-                <form action="/add_comment/{{post.id}}" method=POST>
+        {% if wallMessages %}
+        <div id="posts">
+            {% for wallMessages in all_wallMessages %}
+            <div class="one_post">
+                <p class="wallcontent">{{ wallMessage.content }}</p>
+                <p class="poster"> By: <a href="/user_profile/{{ wallMessage.poster.id }}"> {{ wallMessage.poster.first_name }} {{ wallMessage.poster.last_name }} </a></p>
+                <!-- <a href="/like/{{post.id}}"> Like Post </a>
+                <p>{{ post.user_likes.count }}</p> -->
+                
+                <form action="/add_comment/{{ wallMessage.id }}" method="POST">
                     {% csrf_token %}
-                    Comment: <input type="text" name='comment'>
-                    <input type="submit" value='submit'>
+                    <div class="row">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="comment"class= "col-md-4"> Comment: </label>
+                                <textarea name="comment" id="comment" class="form-control col-md-6"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="commentPost" class= "col-md-4"></label>
+                                <button class="btn btn-default" type="submit"> Submit </button>
+                            </div>    
+                        </div>
+                    </div>  
                 </form>
-                {% for comment in post.post_comments.all %}
-                    <p>{{comment.comment}}</p>
-                    <p>poster: {{comment.poster.first_name}} {{comment.poster.last_name}}</p>
-                    <a href="/delete/{{comment.id}}">Delete</a>
+                {% for comment in wallMessage.wallMessage_comments.all %}
+                    <p> {{ comment.comment }} </p>
+                    <p> poster: {{ comment.poster.first_name }} {{ comment.poster.last_name }} </p>
+                    {% if request.session.user_id == wallMessage.user.id %}
+                        <a href="/delete/{{ comment.id }}"> Delete </a>
+                    {% endif %}
                 {% endfor %}
             </div>
             {% endfor %}
         </div>
-
-    </div>
+        {% endif %}
+</div>
 {% endblock content %}

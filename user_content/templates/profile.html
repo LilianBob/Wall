@@ -1,27 +1,55 @@
 {% extends "base.html" %} 
     <nav>
         <ul>
-            <li><a href="/logout">Logout</a></li>
+            <li><a href="/logout"> Logout </a></li>
         </ul>
     </nav>
 {% block content %}
-    <h1>Hello {{user.first_name}} {{user.last_name}}</h1>
+    <h1> Hello {{ user.first_name }} {{ user.last_name }} </h1>
 
 
     {% for post in user.user_messages.all %}
-    <p>{{post.message}}</p>
+    <p> {{ post.message }} </p>
     {% endfor %}
 
     {% for comment in user.user_comments.all %}
-    <p>{{comment.comment}}</p>
+    <p> {{ comment.comment }} </p>
     {% endfor %}
 
     Edit User Form:
-    <form action="/edit/{{user.id}}" method=POST>
+    <form action="/edit/{{ user.id }}" method="POST">
         {% csrf_token %}
-        First Name: <input type="text" name='fname' value={{user.first_name}}>
-        Last Name: <input type="text" name='lname' value={{user.last_name}}>
-        Email: <input type="text" name='email' value={{user.email}}>
-        <input type="submit">
+        <div class="row">
+            <div class="col-md">
+                <div class="form-group form-inline">
+                    <label for="first_name" class= "col-md-4"> First Name: </label>
+                    <input type="text" name="fname" value="{{ user.first_name }}" class="form-control col-md-6">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md">
+                <div class="form-group form-inline">
+                    <label for="Last_name"class= "col-md-4" > Last Name: </label>
+                    <input type="text" name="lname" value="{{ user.last_name }}" class="form-control col-md-6">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md">
+                <div class="form-group form-inline">
+                    <label for="email" class= "col-md-4"> Email </label>
+                    <input type="text" name="email" value="{{ user.email }}" class="form-control col-md-6">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md">
+                <div class="form-group">
+                    <label for="editUser" class= "col-md-4"></label>
+                    <button class="btn btn-default" type="submit"> Submit </button>
+                </div>    
+            </div>
+        </div> 
     </form>
 {% endblock content %}

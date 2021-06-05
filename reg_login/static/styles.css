@@ -51,7 +51,7 @@ nav ul li{
     display: flex;
     justify-content: center;
 }
-#wrap{
+/* #wrap{
     margin: 0px auto;
     background-color:rgba(128, 128, 128, 0.87);
     width: 950px;
@@ -111,4 +111,4 @@ nav ul li{
 
 #write{
     text-align: center;
-}
+} */

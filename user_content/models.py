@@ -1,15 +1,28 @@
 from django.db import models
-# from reg_login import models
 from reg_login.models import User
 
 # Create your models here.
+class WallMessageManager(models.Manager):
+    def validate_wallMessage(self, wall_message):
+        errors = {}
+        if len(wall_message) < 2:
+            errors['length'] = 'wallMessages must be at least 2 characters'
+        if len(wall_message) > 255:
+            errors['length'] = 'wallMessages take a max of 255 characters'
+        return errors
 
-class Wall_Message(models.Model):
-    message = models.CharField(max_length=255)
-    poster = models.ForeignKey(User, related_name='user_messages', on_delete=models.CASCADE)
-    user_likes = models.ManyToManyField(User, related_name='liked_posts')
+class WallMessage(models.Model):
+    content = models.CharField(max_length=255)
+    poster = models.ForeignKey(User, related_name='wallMessages', on_delete=models.CASCADE)
+    # user_likes = models.ManyToManyField(User, related_name='liked_posts')
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    objects= WallMessageManager()
 
 class Comment(models.Model):
     comment = models.CharField(max_length=255)
-    poster = models.ForeignKey(User, related_name='user_comments', on_delete=models.CASCADE)
-    wall_message = models.ForeignKey(Wall_Message, related_name="post_comments", on_delete=models.CASCADE)
+    poster = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
+    wallMessage = models.ForeignKey(WallMessage, related_name="comments", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
